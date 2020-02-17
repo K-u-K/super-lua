@@ -106,23 +106,26 @@ function Mutate(genome)
 	local mutate = false
 
 	for mutation, rate in pairs(genome.mutationRates) do
-		-- if math.random(1, 2) == 1 then
-		-- 	genome.mutationRates[mutation] = 0.95 * rate
-		-- else
-		-- 	genome.mutationRates[mutation] = 1.05263 * rate
-		-- end
+		if Mode["GA"] then
+			if math.random(1, 2) == 1 then
+				genome.mutationRates[mutation] = 0.95 * rate
+			else
+				genome.mutationRates[mutation] = 1.05263 * rate
+			end
 		--print("Checking for mutation: " .. genome.mutationIter .. IterationsBeforeOneFithAdaption)
-		if mutation ~= "step" then
-			--print("Adapting mutation rates..." .. genome.mutationCount[mutation] .. " - "..  mutation .. " - " .. genome.mutationIter)
-			if genome.mutationIter >= IterationsBeforeOneFithAdaption then
-				if genome.mutationCount[mutation] > (genome.mutationIter / 5) then
-					if mutation == "connections" then genome.mutationRates["step"] = (1/0.82) * rate end
-					genome.mutationRates[mutation] = (1/0.82) * rate
-				else
-					if mutation == "connections" then genome.mutationRates["step"] = 0.82 * rate end
-					genome.mutationRates[mutation] = 0.82 * rate
+		else
+			if mutation ~= "step" then
+				--print("Adapting mutation rates..." .. genome.mutationCount[mutation] .. " - "..  mutation .. " - " .. genome.mutationIter)
+				if genome.mutationIter >= IterationsBeforeOneFithAdaption then
+					if genome.mutationCount[mutation] > (genome.mutationIter / 5) then
+						if mutation == "connections" then genome.mutationRates["step"] = (1/0.82) * rate end
+						genome.mutationRates[mutation] = (1/0.82) * rate
+					else
+						if mutation == "connections" then genome.mutationRates["step"] = 0.82 * rate end
+						genome.mutationRates[mutation] = 0.82 * rate
+					end
+					mutate = true
 				end
-				mutate = true
 			end
 		end
 	end

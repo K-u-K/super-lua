@@ -30,8 +30,8 @@ EnableMutationChance = 0.2
 
 IterationsBeforeOneFithAdaption = 1
 Mode = {}
-Mode["GA"] = false
-Mode["ES"] = true
+Mode["GA"] = true
+Mode["ES"] = false
 
 -- Misc
 TimeoutConstant = 20

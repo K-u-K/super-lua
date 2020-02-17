@@ -13,8 +13,8 @@ require("jsonWrapper")
 
 Savestate = Split(RestartState, "([A-Za-z]*)")[1]
 Jwrap = JsonWrapper:create()
-os.execute("rm *.json")
-os.execute("del *.json")
+os.execute("rm " .. (Mode["GA"] == true and 'GA_' or 'ES_') .. "*.json")
+os.execute("del " .. (Mode["GA"] == true and 'GA_' or 'ES_') .. "*.json")
 
 if Mode["GA"] == Mode["ES"] then
 	print("Modes must have different values.")
@@ -49,6 +49,7 @@ forms.button(Form, "Load", LoadPool, 255, 5)
 forms.button(Form, "Current best", PlayTop, 5, 35)
 forms.label(Form, "Save file:", 5, 70, 40)
 forms.label(Form, "Load file:", 5, 90, 40)
+GenProgress = forms.textbox(Form, "Gen. #0 Progress: 0%", 130, 25, nil, 180, 35)
 SaveFile = forms.textbox(Form, Savestate .. ".json", 200, 25, nil, 115, 65)
 LoadFile = forms.textbox(Form, "", 200, 25, nil, 115, 90)
 HideOverlay = forms.checkbox(Form, "Hide overlay", 90, 35)
@@ -90,9 +91,8 @@ while true do
 		if fitness > Pool.maxFitness then
 			Pool.maxFitness = fitness
 			forms.settext(MaxFitnessLabel, "Max Fitness: " .. math.floor(Pool.maxFitness))
-			print("Write current best pool to file...")
 			print("Current best fitness -> Gen. " .. Pool.generation .. " Spec. " .. Pool.currentSpecies .. " Genome " .. Pool.currentGenome .. " Fitness: " .. fitness)
-			SavePool("best_gen#" .. Pool.generation .. "_f#" .. fitness .. "_" .. forms.gettext(SaveFile))
+			SavePool((Mode["GA"] == true and 'GA_' or 'ES_') .. "best_gen#" .. Pool.generation .. "_f#" .. fitness .. "_" .. forms.gettext(SaveFile))
 		else
 			print("Gen. " .. Pool.generation .. " Spec. " .. Pool.currentSpecies .. " Genome " .. Pool.currentGenome .. " Fitness: " .. fitness)
 		end
@@ -120,7 +120,7 @@ while true do
 		gui.drawText(0, 22, "Fitness: " .. math.floor(Rightmost - (Pool.currentFrame) / 2 - (Timeout + timeoutBonus)*2/3), 0xFF000000, 11, "Arial Black")
 		gui.drawText(100, 22, "Max Fitness: " .. math.floor(Pool.maxFitness), 0xFF000000, 11, "Arial Black")
 	end
-
+	forms.settext(GenProgress, "Gen. #" .. Pool.generation .. " Progress: " .. math.floor(measured / total * 100) .. "%")
 	Pool.currentFrame = Pool.currentFrame + 1
 
 	emu.frameadvance();
