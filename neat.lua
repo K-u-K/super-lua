@@ -146,8 +146,8 @@ function NewGeneration()
 	end
 
 	Pool.generation = Pool.generation + 1
-	print("Saving newly generated population to file...")
-	SavePool("new_gen#" .. Pool.generation .. "_" .. forms.gettext(SaveLoadFile))
+	--print("Saving newly generated generation to file...")
+	--SavePool("new_gen#" .. Pool.generation .. "_" .. forms.gettext(SaveFile))
 end
 
 function RandomNeuron(genes, nonInput)

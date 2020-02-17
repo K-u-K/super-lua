@@ -10,7 +10,7 @@ Inputs = InputSize + 1
 Outputs = #ButtonNames
 
 -- NN
-Population = 10
+Population = 350
 DeltaDisjoint = 2.0
 DeltaWeights = 0.4
 DeltaThreshold = 1.0

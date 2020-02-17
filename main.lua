@@ -12,6 +12,9 @@ require("misc")
 require("jsonWrapper")
 
 Savestate = Split(RestartState, "([A-Za-z]*)")[1]
+Jwrap = JsonWrapper:create()
+os.execute("rm *.json")
+os.execute("del *.json")
 
 if Mode["GA"] == Mode["ES"] then
 	print("Modes must have different values.")
@@ -38,15 +41,18 @@ Rightmost = 0
 
 event.onexit(onExit)
 
-Form = forms.newform(350, 130, "__--~**'' SuperLua ''**~--__")
+Form = forms.newform(350, 160, "__--~**'' SuperLua ''**~--__")
 MaxFitnessLabel = forms.label(Form, "Max Fitness: " .. math.floor(Pool.maxFitness), 5, 10)
 forms.button(Form, "Restart", InitializePool, 105, 5)
 forms.button(Form, "Save", SavePool, 180, 5)
 forms.button(Form, "Load", LoadPool, 255, 5)
 forms.button(Form, "Current best", PlayTop, 5, 35)
-forms.label(Form, "Save/Load:", 5, 70, 40)
-SaveLoadFile = forms.textbox(Form, Savestate .. ".json", 200, 25, nil, 115, 65)
+forms.label(Form, "Save file:", 5, 70, 40)
+forms.label(Form, "Load file:", 5, 90, 40)
+SaveFile = forms.textbox(Form, Savestate .. ".json", 200, 25, nil, 115, 65)
+LoadFile = forms.textbox(Form, "", 200, 25, nil, 115, 90)
 HideOverlay = forms.checkbox(Form, "Hide overlay", 90, 35)
+forms.setproperty(HideOverlay, "Checked", true)
 
 while true do
 	local backgroundColor = 0xD0FFFFFF
@@ -76,8 +82,7 @@ while true do
 		local fitness = Rightmost - Pool.currentFrame / 2
 		if Rightmost > 3186 then
 			fitness = fitness + 1000
-		end
-		if fitness == 0 then
+		elseif fitness == 0 then
 			fitness = -1
 		end
 		genome.fitness = fitness
@@ -87,7 +92,7 @@ while true do
 			forms.settext(MaxFitnessLabel, "Max Fitness: " .. math.floor(Pool.maxFitness))
 			print("Write current best pool to file...")
 			print("Current best fitness -> Gen. " .. Pool.generation .. " Spec. " .. Pool.currentSpecies .. " Genome " .. Pool.currentGenome .. " Fitness: " .. fitness)
-			SavePool("best_gen#" .. Pool.generation .. "_" .. forms.gettext(SaveLoadFile))
+			SavePool("best_gen#" .. Pool.generation .. "_f#" .. fitness .. "_" .. forms.gettext(SaveFile))
 		else
 			print("Gen. " .. Pool.generation .. " Spec. " .. Pool.currentSpecies .. " Genome " .. Pool.currentGenome .. " Fitness: " .. fitness)
 		end

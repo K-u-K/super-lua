@@ -48,7 +48,7 @@ function Split(val, delimiter)
 end
 
 function SavePool(filename)
-	filename = filename or forms.gettext(SaveLoadFile)
+	filename = filename or forms.gettext(SaveFile)
 	local pool = DeepCopy(Pool)
 	for i = 1, #pool.species do
 		for k = 1, #pool.species[i].genomes do
@@ -56,13 +56,13 @@ function SavePool(filename)
 		end
 	end
 
-	JsonWrapper.writeToFile(pool, filename)
+	Jwrap:writeToFile(pool, filename)
 end
 
 function LoadPool(filename)
 	print("Load file pool...")
-	filename = filename or forms.gettext(SaveLoadFile)
-	Pool = JsonWrapper.readFromFile(filename)
+	filename = filename or forms.gettext(LoadFile)
+	Pool = Jwrap:readFromFile(filename)
 
 	if Pool ~= nil then
 		while FitnessAlreadyMeasured() do
@@ -90,7 +90,7 @@ function PlayTop()
 	Pool.currentGenome = maxg
 	Pool.maxFitness = maxfitness
 	forms.settext(MaxFitnessLabel, "Max Fitness: " .. math.floor(Pool.maxFitness))
-	print("<>------- Running top genome -------<>")
+	print("<>------- Running top genome -------<> : ")
 	InitializeRun()
 	Pool.currentFrame = Pool.currentFrame + 1
 	return
